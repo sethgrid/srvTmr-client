@@ -89,8 +89,8 @@ define(function(require, exports, module) {
             minutes = "0"+Math.floor((t / (1000 * 60)) % 60);
             m = minutes.substr(-2);
             s = seconds.substr(-2);
-            t = tenths.substr(-2);
-            return "<span class='stopwatch'><span class='mins'>"+m+"</span>:<span class='secs'>"+s+"</span>.<span class='tenths'>"+t+"</span></span>";
+            tn = tenths.substr(-2);
+            return "<span class='stopwatch'><span class='mins'>"+m+"</span>:<span class='secs'>"+s+"</span>.<span class='tenths'>"+tn+"</span></span><input id='timer-value' type='hidden' value='"+t+"' name='time'>";
           }
 
           // public API

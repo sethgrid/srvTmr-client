@@ -63,64 +63,31 @@ define(function(require, exports, module) {
             }
         });
 
-        // this.hamburgerSurface = new ImageSurface({
-        //     size: [44, 44],
-        //     content : 'img/hamburger.png'
-        // });
-
-        // var searchSurface = new ImageSurface({
-        //     size: [232, 44],
-        //     content : 'img/search.png'
-        // });
-
-        // var iconSurface = new ImageSurface({
-        //     size: [44, 44],
-        //     content : 'img/icon.png'
-        // });
-
         var backgroundModifier = new StateModifier({
             transform : Transform.behind
         });
 
-        // var hamburgerModifier = new StateModifier({
-        //     origin: [0, 0.5],
-        //     align : [0, 0.5]
-        // });
-
-        // var searchModifier = new StateModifier({
-        //     origin: [0.5, 0.5],
-        //     align : [0.5, 0.5]
-        // });
-
-        // var iconModifier = new StateModifier({
-        //     origin: [1, 0.5],
-        //     align : [1, 0.5]
-        // });
-
         this.layout.header.add(backgroundModifier).add(backgroundSurface);
-        // this.layout.header.add(hamburgerModifier).add(this.hamburgerSurface);
-        // this.layout.header.add(searchModifier).add(searchSurface);
-        // this.layout.header.add(iconModifier).add(iconSurface);
     }
 
     function _createTimer() {
         this.bodySurface = new Surface({
             size : [undefined, undefined],
             properties: {
-                backgroundColor: 'white',
+                backgroundColor: '#192235',
                 color: 'red',
             },
         });
 
         this.timerSurface = new Surface({
             size: [200, 200],
-            content : "<span class='stopwatch'><span class='mins'>00</span>:<span class='secs'>00</span>.<span class='tenths'>0</span></span>",
+            content : "<span class='stopwatch'><span class='mins'>00</span>:<span class='secs'>00</span>.<span class='tenths'>0</span></span><input id='timer-value' type='hidden' value='00:00.0' name='time'>",
             properties: {
-                border: '1px solid black',
                 borderRadius: '100px',
                 textAlign: 'center',
                 fontSize: '44px',
                 paddingTop: '65px',
+                backgroundColor: 'white',
             },
         });
 
@@ -131,12 +98,14 @@ define(function(require, exports, module) {
 
         this.resetSurface = new Surface({
             size: [50, 50],
-            content: 'reset',
+            content: '↻',
             properties: {
-                border: '1px solid black',
                 borderRadius: '25px',
                 textAlign: 'center',
-                paddingTop: '10px',
+                paddingTop: '0px',
+                fontSize: '36px',
+                backgroundColor: '#FA5C4F',
+                color: '#FF8080',
             },
         });
 
@@ -147,12 +116,15 @@ define(function(require, exports, module) {
 
         this.submitSurface = new Surface({
             size: [66, 66],
-            content: 'submit!',
+            content: '▶',
             properties: {
-                border: '1px solid black',
                 borderRadius: '33px',
                 textAlign: 'center',
-                paddingTop: '10px',
+                paddingTop: '4px',
+                paddingLeft: '10px',
+                backgroundColor: 'lime',
+                fontSize: '48px',
+                color: '#FFFF99',
             },
         });
 
@@ -173,10 +145,10 @@ define(function(require, exports, module) {
             size: [undefined, undefined],
             content: 'stats',
             properties: {
-                border: '1px solid black',
                 borderRadius: '5px',
                 textAlignt: 'center',
                 paddingTop: '5px',
+                backgroundColor: '#E6E6F0',
             },
         });
 
@@ -216,6 +188,17 @@ define(function(require, exports, module) {
 
         this.EventHandlerTimer.on('timerReset', function(){
             this.options.stopwatch.reset();
+        }.bind(this));
+
+        this.submitSurface.on('click', function(){
+            this.EventHandlerTimer.emit('timerSubmit');
+        }.bind(this));
+
+        this.EventHandlerTimer.on('timerSubmit', function(){
+            var e = document.getElementById("select-box");
+            var place_id = e.options[e.selectedIndex].value;
+            var time = document.getElementById('timer-value');
+            alert('submitting the following ' + place_id + " " +  time.value);
         }.bind(this));
     }
 
