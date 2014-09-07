@@ -2,9 +2,12 @@ define(function(require, exports, module) {
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
     var Transform       = require('famous/core/Transform');
+    var EventHandler    = require('famous/core/EventHandler');
     var StateModifier   = require('famous/modifiers/StateModifier');
     var HeaderFooter    = require('famous/views/HeaderFooterLayout');
     var ImageSurface    = require('famous/surfaces/ImageSurface');
+
+    var StopWatch       = require('data/StopWatch');
 
     function PageView() {
         View.apply(this, arguments);
@@ -15,7 +18,7 @@ define(function(require, exports, module) {
         _createTimer.call(this);
         _createStats.call(this);
 
-       // _setListeners.call(this);
+        _setListeners.call(this);
     }
 
     PageView.prototype = Object.create(View.prototype);
@@ -23,7 +26,9 @@ define(function(require, exports, module) {
 
     PageView.DEFAULT_OPTIONS = {
         geoData: {},
-        headerSize: 44
+        stopwatch: {},
+        headerSize: 44,
+        timerRunning: false,
     };
 
     function _createBacking() {
@@ -51,7 +56,7 @@ define(function(require, exports, module) {
 
     function _createHeader() {
         var backgroundSurface = new Surface({
-            content: '<select id="select-box"></select>',
+            content: '<div class="styled-select"><select id="select-box"></select></div>',
             properties: {
                 backgroundColor: 'white',
                 color: 'blue',
@@ -183,13 +188,27 @@ define(function(require, exports, module) {
         this.layout.content.add(statsModifier).add(this.statsSurface);
     }
 
-    // function _setListeners() {
-    //     this.hamburgerSurface.on('click', function() {
-    //         this._eventOutput.emit('menuToggle');
-    //     }.bind(this));
+    function _setListeners() {
+        this.timerSurface.addClass("timer");
 
-    //     this.bodySurface.pipe(this._eventOutput);
-    // }
+        this.options.stopwatch = new StopWatch("timer", {delay: 10});
+
+        this.EventHandlerTimer = new EventHandler();
+        this.timerSurface.on('click', function() {
+            this.EventHandlerTimer.emit('timerToggle');
+        }.bind(this));
+
+        this.EventHandlerTimer.on('timerToggle', function(){
+            this.options.timerRunning = !this.options.timerRunning;
+            if (this.options.timerRunning){
+                console.log('start');
+                this.options.stopwatch.start();
+            } else {
+                console.log('stop');
+                this.options.stopwatch.stop();
+            }
+        }.bind(this));
+    }
 
     module.exports = PageView;
 });
