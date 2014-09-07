@@ -28,3 +28,16 @@ body {
    padding: 5px; /* If you add too much padding here, the options won't show in IE */
    width: 100%;
 }
+
+span.stopwatch {
+	color: 'blue';
+}
+span.mins{
+	font-size: 36pt;
+}
+span.secs{
+	font-size: 36pt;
+}
+span.tenths{
+	font-size: 18pt;
+}

@@ -114,7 +114,7 @@ define(function(require, exports, module) {
 
         this.timerSurface = new Surface({
             size: [200, 200],
-            content : '00:00:00',
+            content : "<span class='stopwatch'><span class='mins'>00</span>:<span class='secs'>00</span>.<span class='tenths'>0</span></span>",
             properties: {
                 border: '1px solid black',
                 borderRadius: '100px',
@@ -194,8 +194,13 @@ define(function(require, exports, module) {
         this.options.stopwatch = new StopWatch("timer", {delay: 10});
 
         this.EventHandlerTimer = new EventHandler();
+
         this.timerSurface.on('click', function() {
             this.EventHandlerTimer.emit('timerToggle');
+        }.bind(this));
+
+        this.resetSurface.on('click', function(){
+            this.EventHandlerTimer.emit('timerReset');
         }.bind(this));
 
         this.EventHandlerTimer.on('timerToggle', function(){
@@ -207,6 +212,10 @@ define(function(require, exports, module) {
                 console.log('stop');
                 this.options.stopwatch.stop();
             }
+        }.bind(this));
+
+        this.EventHandlerTimer.on('timerReset', function(){
+            this.options.stopwatch.reset();
         }.bind(this));
     }
 

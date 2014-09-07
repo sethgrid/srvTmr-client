@@ -67,7 +67,11 @@ define(function(require, exports, module) {
             console.log("looking for class:", elem);
             elems = document.getElementsByClassName(elem);
             if (elems.length == 1){
-              elems[0].innerHTML = clock/1000;
+              // clock is number of milliseconds
+              mins   = Math.floor(clock / 1000 / 60);
+              secs   = mins - Math.floor(clock / 1000);
+              tenths = secs - Math.floor(clock / 100);
+              elems[0].innerHTML = display(clock);
             }
           }
 
@@ -77,6 +81,16 @@ define(function(require, exports, module) {
 
             offset = now;
             return d;
+          }
+
+          function display(t){
+            tenths  = ""+Math.floor((t / 100) % 10);
+            seconds = "0"+Math.floor((t / 1000) % 60);
+            minutes = "0"+Math.floor((t / (1000 * 60)) % 60);
+            m = minutes.substr(-2);
+            s = seconds.substr(-2);
+            t = tenths.substr(-2);
+            return "<span class='stopwatch'><span class='mins'>"+m+"</span>:<span class='secs'>"+s+"</span>.<span class='tenths'>"+t+"</span></span>";
           }
 
           // public API
