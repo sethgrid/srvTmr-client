@@ -94,6 +94,7 @@ define(function(require, exports, module) {
 	  	}
 	  	// populate exports to make data available to the Famo.us application
     	module.exports = data;
+    	updateDOM(data);
     	console.log("Returning the following data back to the application:", data);
 	}
 
@@ -103,6 +104,17 @@ define(function(require, exports, module) {
 	    alert(msg);
 	}
 
-	// kick off the process
+	function updateDOM(mapResults){
+		var select = document.getElementById("select-box");
+		for (var i = 0; i < mapResults.length; i++) {
+	      	// each of these is a result that we want. Add them to a dropdown.
+	      	r = mapResults[i];
+	      	var option = document.createElement("option");
+	      	option.text = r.name;
+	      	option.value = r.place_id;
+	      	select.appendChild(option);
+	  	}
+	}
+
 	initGeolocation();
 });

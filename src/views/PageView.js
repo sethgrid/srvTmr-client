@@ -22,6 +22,7 @@ define(function(require, exports, module) {
     PageView.prototype.constructor = PageView;
 
     PageView.DEFAULT_OPTIONS = {
+        geoData: {},
         headerSize: 44
     };
 
@@ -50,7 +51,7 @@ define(function(require, exports, module) {
 
     function _createHeader() {
         var backgroundSurface = new Surface({
-            content: 'Input Surface: locations',
+            content: '<select id="select-box"></select>',
             properties: {
                 backgroundColor: 'white',
                 color: 'blue',

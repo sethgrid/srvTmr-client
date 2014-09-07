@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
     var PageView      = require('views/PageView');
     //var MenuView      = require('views/MenuView');
-    var StripData     = require('data/StripData');
+    //var GeoData     = require('data/GeoData');
 
     function AppView() {
         View.apply(this, arguments);
@@ -54,6 +54,7 @@ define(function(require, exports, module) {
     // };
 
     AppView.DEFAULT_OPTIONS = {
+        geoData: {},
         // openPosition: 276,
         // transition: {
         //     duration: 300,
@@ -64,7 +65,7 @@ define(function(require, exports, module) {
     };
 
     function _createPageView() {
-        this.pageView = new PageView();
+        this.pageView = new PageView({geoData: this.options.geoData});
         this.pageModifier = new Modifier({
             transform: function() {
                 return Transform.translate(0, 0, 0);
