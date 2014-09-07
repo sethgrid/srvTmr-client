@@ -21,6 +21,8 @@
 
         <!-- app code -->
         <link rel="stylesheet" type="text/css" href="css/app.css" />
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
         <script type="text/javascript">
             require.config({
                 baseUrl: './src/'
@@ -28,5 +30,5 @@
             require(['main']);
         </script>
     </head>
-    <body></body>
+    <body><div id="map-canvas"></div></body>
 </html>
