@@ -79,8 +79,8 @@ define(function(require, exports, module) {
         this.bodySurface = new Surface({
             size : [undefined, undefined],
             properties: {
-                backgroundColor: '#192235',
-                color: 'red',
+                backgroundColor: '#003333', // deep blue
+                color: '#669999',
             },
         });
 
@@ -109,8 +109,8 @@ define(function(require, exports, module) {
                 textAlign: 'center',
                 paddingTop: '0px',
                 fontSize: '36px',
-                backgroundColor: '#FA5C4F',
-                color: '#FF8080',
+                backgroundColor: '#801515', // deep red
+                color: '#FFAAAA',
             },
         });
 
@@ -127,9 +127,9 @@ define(function(require, exports, module) {
                 textAlign: 'center',
                 paddingTop: '4px',
                 paddingLeft: '10px',
-                backgroundColor: 'lime',
+                backgroundColor: '#567714', // green
                 fontSize: '48px',
-                color: '#FFFF99',
+                color: '#D4EE9F',
             },
         });
 
@@ -142,7 +142,7 @@ define(function(require, exports, module) {
             size: [100, 100],
             content: '✓',
             properties: {
-                backgroundColor: 'blue',
+                backgroundColor: '#669999',
                 color: 'white',
                 fontSize: '76px',
                 borderRadius: '50px',
@@ -171,7 +171,7 @@ define(function(require, exports, module) {
             size: [undefined, undefined],
             content: 'stats',
             properties: {
-                borderRadius: '5px',
+                //borderRadius: '5px',
                 textAlignt: 'center',
                 paddingTop: '5px',
                 backgroundColor: '#E6E6F0',
