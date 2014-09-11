@@ -6,6 +6,9 @@ define(function(require, exports, module) {
     var StateModifier   = require('famous/modifiers/StateModifier');
     var HeaderFooter    = require('famous/views/HeaderFooterLayout');
     var ImageSurface    = require('famous/surfaces/ImageSurface');
+    var Utility         = require('famous/utilities/Utility');
+    var Easing          = require('famous/transitions/Easing');
+
 
     var StopWatch       = require('data/StopWatch');
 
@@ -29,6 +32,8 @@ define(function(require, exports, module) {
         stopwatch: {},
         headerSize: 44,
         timerRunning: false,
+        lastSubmission: 0,
+        submissionBuffer: 10000 // ms
     };
 
     function _createBacking() {
@@ -133,11 +138,32 @@ define(function(require, exports, module) {
             align:  [0.85, 0.55],
         });
 
+        this.submittedSurface = new Surface({
+            size: [100, 100],
+            content: '✓',
+            properties: {
+                backgroundColor: 'blue',
+                color: 'white',
+                fontSize: '76px',
+                borderRadius: '50px',
+                paddingLeft: '20px',
+            },
+        });
+
+        this.submittedModifier = new StateModifier({
+            origin: [0.5, 0.95],
+            align: [0.5, 0.5],
+            // sets initial x- and y-scale to be 0
+            transform: Transform.scale(0, 0, 1),
+            // sets inital opacity to 0
+            opacity: 0
+        });
 
         this.layout.content.add(this.bodySurface);
         this.layout.content.add(timerModifier).add(this.timerSurface);
         this.layout.content.add(resetModifier).add(this.resetSurface);
         this.layout.content.add(submitModifier).add(this.submitSurface);
+        this.layout.content.add(this.submittedModifier).add(this.submittedSurface);
     }
 
     function _createStats() {
@@ -195,10 +221,35 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this.EventHandlerTimer.on('timerSubmit', function(){
-            var e = document.getElementById("select-box");
-            var place_id = e.options[e.selectedIndex].value;
-            var time = document.getElementById('timer-value');
-            alert('submitting the following ' + place_id + " " +  time.value);
+            if (this.options.lastSubmission < new Date().getTime() - this.options.submissionBuffer){ // prevent accidental duplicate submits within x ms
+                this.options.lastSubmission = new Date().getTime();
+                var e = document.getElementById("select-box");
+                var place_id = e.options[e.selectedIndex].value;
+                var time = document.getElementById('timer-value');
+
+                Utility.loadURL("http://localhost:9999/submit?place_id="+place_id+"&time="+time.value, function(response){
+                    console.log('submission callback: ', response);
+                    this.submittedModifier.setTransform(
+                        Transform.scale(1, 1, 1),
+                        { duration : 2000, curve: Easing.outBack }
+                    );
+
+                    // animates opacity to 1
+                    this.submittedModifier.setOpacity(1, {
+                        duration: 2000, curve: Easing.outBack
+                    });
+
+                     // animates opacity to 0
+                    this.submittedModifier.setOpacity(1, {
+                        duration: 2000, curve: Easing.outBack
+                    });
+
+                    this.submittedModifier.setTransform(
+                        Transform.scale(0, 0, 0),
+                        { duration : 2000, curve: Easing.outBack }
+                    );
+                }.bind(this));
+            }
         }.bind(this));
     }
 
