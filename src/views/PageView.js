@@ -1,3 +1,4 @@
+// consider ui: http://hellowoo.com/wp-content/uploads/2013/10/future-UI-031.jpg
 define(function(require, exports, module) {
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
@@ -7,6 +8,7 @@ define(function(require, exports, module) {
     var HeaderFooter    = require('famous/views/HeaderFooterLayout');
     var ImageSurface    = require('famous/surfaces/ImageSurface');
     var Utility         = require('famous/utilities/Utility');
+    var Timer         = require('famous/utilities/Timer');
     var Easing          = require('famous/transitions/Easing');
 
 
@@ -22,6 +24,8 @@ define(function(require, exports, module) {
         _createStats.call(this);
 
         _setListeners.call(this);
+        _getStats.call(this);
+        _updateStatsSurface.call(this);
     }
 
     PageView.prototype = Object.create(View.prototype);
@@ -33,7 +37,10 @@ define(function(require, exports, module) {
         headerSize: 44,
         timerRunning: false,
         lastSubmission: 0,
-        submissionBuffer: 10000 // ms
+        submissionBuffer: 10000, // ms
+        statsUrlQuery: "",
+        placeStats: {},
+        selectedPlace: "",
     };
 
     function _createBacking() {
@@ -169,7 +176,7 @@ define(function(require, exports, module) {
     function _createStats() {
         this.statsSurface = new Surface({
             size: [undefined, undefined],
-            content: 'stats',
+            content: '',
             properties: {
                 //borderRadius: '5px',
                 textAlignt: 'center',
@@ -184,6 +191,66 @@ define(function(require, exports, module) {
         });
 
         this.layout.content.add(statsModifier).add(this.statsSurface);
+    }
+
+    function _getStats(){
+        Timer.setTimeout(function(){
+            if (!window.stats_url_query){
+                _getStats.call(this);
+            } else {
+                // why don't I have 'this'?
+                // next: when query is available, call to it and get data back
+                this.options.statsUrlQuery = window.stats_url_query
+                Utility.loadURL("http://localhost:9999/stats?"+this.options.statsUrlQuery, function(response){
+                    this.options.placeStats = JSON.parse(response);
+                }.bind(this));
+            }
+        }.bind(this), 250);
+    }
+
+    function _updateStatsSurface(){
+        Timer.setInterval(function(){
+            placeID = getSelectedPlace();
+            // update stats panel
+            this.statsSurface.setContent(formatStats(getRecord(this.options.placeStats, placeID)))
+        }.bind(this), 250)
+    }
+
+    function getSelectedPlace(){
+        var e = document.getElementById("select-box");
+        if (!e || e.length == 0){
+            return
+        }
+        if (!e.selectedIndex){  e.selectedIndex = 0; };
+        var place_id = e.options[e.selectedIndex].value;
+        return place_id;
+    }
+
+    function getRecord(jsonDatas, ID){
+        console.log("looking for ", ID, jsonDatas)
+        for (var i=0; i<jsonDatas.length; i++){
+            console.log(jsonDatas[i])
+            if (jsonDatas[i]["ID"] == ID){
+                return "                                        \
+                    <table id='stats_table'>                    \
+                        <tr class='stats_row'>                  \
+                            <td class='left_cell'>              \
+                                Average                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                "+jsonDatas[i]["Average"]+"     \
+                            </td>                               \
+                        </tr>                                   \
+                    </table>                                    \
+                                                                \
+                ";
+            }
+        }
+        return "Loading ..."
+    }
+
+    function formatStats(jsonData){
+        return jsonData;
     }
 
     function _setListeners() {
@@ -204,10 +271,8 @@ define(function(require, exports, module) {
         this.EventHandlerTimer.on('timerToggle', function(){
             this.options.timerRunning = !this.options.timerRunning;
             if (this.options.timerRunning){
-                console.log('start');
                 this.options.stopwatch.start();
             } else {
-                console.log('stop');
                 this.options.stopwatch.stop();
             }
         }.bind(this));
@@ -228,7 +293,6 @@ define(function(require, exports, module) {
                 var time = document.getElementById('timer-value');
 
                 Utility.loadURL("http://localhost:9999/submit?place_id="+place_id+"&time="+time.value, function(response){
-                    console.log('submission callback: ', response);
                     this.submittedModifier.setTransform(
                         Transform.scale(1, 1, 1),
                         { duration : 2000, curve: Easing.outBack }

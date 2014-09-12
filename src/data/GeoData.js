@@ -104,16 +104,24 @@ define(function(require, exports, module) {
 	    alert(msg);
 	}
 
+	// how do I do this without direct dom manipulation through famo.us?
 	function updateDOM(mapResults){
 		var select = document.getElementById("select-box");
+		var stats_url_query = ""
 		for (var i = 0; i < mapResults.length; i++) {
 	      	// each of these is a result that we want. Add them to a dropdown.
 	      	r = mapResults[i];
 	      	var option = document.createElement("option");
 	      	option.text = r.name;
 	      	option.value = r.place_id;
+	      	if (i == 0){
+	      		option.selected = true;
+	      	}
 	      	select.appendChild(option);
+
+	      	stats_url_query += "place_id[]="+r.place_id+"&";
 	  	}
+	  	window.stats_url_query = stats_url_query;
 	}
 
 	initGeolocation();
