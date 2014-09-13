@@ -39,7 +39,7 @@ define(function(require, exports, module) {
           }
 
           function start() {
-            console.log("started");
+            console.log("timer started");
             if (!interval) {
               offset   = Date.now();
               interval = setInterval(update, options.delay);
@@ -47,6 +47,7 @@ define(function(require, exports, module) {
           }
 
           function stop() {
+            console.log("timer stopped");
             if (interval) {
               clearInterval(interval);
               interval = null;
@@ -55,6 +56,7 @@ define(function(require, exports, module) {
           }
 
           function reset() {
+            console.log("timer reset");
             clock = 0;
             render();
           }
@@ -65,7 +67,6 @@ define(function(require, exports, module) {
           }
 
           function render() {
-            console.log("looking for class:", elem);
             elems = document.getElementsByClassName(elem);
             if (elems.length == 1){
               // clock is number of milliseconds

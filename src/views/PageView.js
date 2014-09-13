@@ -1,4 +1,5 @@
-// consider ui: http://hellowoo.com/wp-content/uploads/2013/10/future-UI-031.jpg
+// consider ui inspiration: http://hellowoo.com/wp-content/uploads/2013/10/future-UI-031.jpg
+// TODO: this file should prolly be broken up into multiple views. A timer view, a stats view...
 define(function(require, exports, module) {
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
@@ -8,9 +9,8 @@ define(function(require, exports, module) {
     var HeaderFooter    = require('famous/views/HeaderFooterLayout');
     var ImageSurface    = require('famous/surfaces/ImageSurface');
     var Utility         = require('famous/utilities/Utility');
-    var Timer         = require('famous/utilities/Timer');
+    var Timer           = require('famous/utilities/Timer');
     var Easing          = require('famous/transitions/Easing');
-
 
     var StopWatch       = require('data/StopWatch');
 
@@ -43,6 +43,7 @@ define(function(require, exports, module) {
         selectedPlace: "",
     };
 
+    // solid color background. will be covered up by other surfaces.
     function _createBacking() {
         var backing = new Surface({
             properties: {
@@ -54,6 +55,7 @@ define(function(require, exports, module) {
         this.add(backing);
     }
 
+    // sets up the header
     function _createLayout() {
         this.layout = new HeaderFooter({
             headerSize: this.options.headerSize
@@ -66,6 +68,7 @@ define(function(require, exports, module) {
         this.add(layoutModifier).add(this.layout);
     }
 
+    // the header is the select drop down box
     function _createHeader() {
         var backgroundSurface = new Surface({
             content: '<div class="styled-select"><select id="select-box"></select></div>',
@@ -82,6 +85,7 @@ define(function(require, exports, module) {
         this.layout.header.add(backgroundModifier).add(backgroundSurface);
     }
 
+    // clock face, submit, reset, and submitted confirmation surfaces and modifiers
     function _createTimer() {
         this.bodySurface = new Surface({
             size : [undefined, undefined],
@@ -174,6 +178,7 @@ define(function(require, exports, module) {
         this.layout.content.add(this.submittedModifier).add(this.submittedSurface);
     }
 
+    // stats surface and modifiers
     function _createStats() {
         this.statsSurface = new Surface({
             size: [undefined, undefined],
@@ -257,14 +262,16 @@ define(function(require, exports, module) {
         }.bind(this), 250);
     }
 
+    // periodically update the stats surface to catch if the user has changed the select box option
     function _updateStatsSurface(){
         Timer.setInterval(function(){
             placeID = getSelectedPlace();
             // update stats panel
-            this.statsSurface.setContent(formatStats(getRecord(this.options.placeStats, placeID)))
+            this.statsSurface.setContent(getRecord(this.options.placeStats, placeID))
         }.bind(this), 250)
     }
 
+    // famous does not want me modifying the dom directly. i'm not yet sure how to get around this here.
     function getSelectedPlace(){
         var e = document.getElementById("select-box");
         if (!e || e.length == 0){
@@ -275,11 +282,13 @@ define(function(require, exports, module) {
         return place_id;
     }
 
+    // formats the json data for the stats panel
     function getRecord(jsonDatas, ID){
         console.log("looking for ", ID, jsonDatas)
         for (var i=0; i<jsonDatas.length; i++){
             console.log(jsonDatas[i])
             if (jsonDatas[i]["ID"] == ID){
+                // TODO: change this to a function call
                 return "                                        \
                     <table id='stats_table'>                    \
                         <tr class='even'>                       \
@@ -332,14 +341,14 @@ define(function(require, exports, module) {
                 ";
             }
         }
-        return  "                                        \
+        return  "                                               \
                     <table id='stats_table'>                    \
                         <tr class='even'>                       \
                             <td class='left_cell'>              \
                                 Average                         \
                             </td>                               \
                             <td class='right_cell'>             \
-                                0    \
+                                0                               \
                                 <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
@@ -348,7 +357,7 @@ define(function(require, exports, module) {
                                 Median                          \
                             </td>                               \
                             <td class='right_cell'>             \
-                                0      \
+                                0                               \
                                 <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
@@ -357,7 +366,7 @@ define(function(require, exports, module) {
                                 90th Percentile                 \
                             </td>                               \
                             <td class='right_cell'>             \
-                                0    \
+                                0                               \
                                 <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
@@ -366,7 +375,7 @@ define(function(require, exports, module) {
                                 Fastest                         \
                             </td>                               \
                             <td class='right_cell'>             \
-                                0     \
+                                0                               \
                                 <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
@@ -375,7 +384,7 @@ define(function(require, exports, module) {
                                 Slowest                         \
                             </td>                               \
                             <td class='right_cell'>             \
-                                0     \
+                                0                               \
                                 <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
@@ -384,10 +393,7 @@ define(function(require, exports, module) {
                 ";
     }
 
-    function formatStats(jsonData){
-        return jsonData;
-    }
-
+    // most (all?) event handling. There are some outside timed events, but clicks and whatnot happen here.
     function _setListeners() {
         this.timerSurface.addClass("timer");
 
@@ -433,12 +439,10 @@ define(function(require, exports, module) {
                         { duration : 2000, curve: Easing.outBack }
                     );
 
-                    // animates opacity to 1
                     this.submittedModifier.setOpacity(1, {
                         duration: 2000, curve: Easing.outBack
                     });
 
-                     // animates opacity to 0
                     this.submittedModifier.setOpacity(1, {
                         duration: 2000, curve: Easing.outBack
                     });
