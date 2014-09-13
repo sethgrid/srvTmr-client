@@ -233,12 +233,49 @@ define(function(require, exports, module) {
             if (jsonDatas[i]["ID"] == ID){
                 return "                                        \
                     <table id='stats_table'>                    \
-                        <tr class='stats_row'>                  \
+                        <tr class='even'>                       \
                             <td class='left_cell'>              \
                                 Average                         \
                             </td>                               \
                             <td class='right_cell'>             \
                                 "+jsonDatas[i]["Average"]+"     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Median                          \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                "+jsonDatas[i]["Median"]+"      \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                90th Percentile                 \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                "+jsonDatas[i]["Percentile_90th"]+"     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Fastest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                "+jsonDatas[i]["Fastest"]+"     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                Slowest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                "+jsonDatas[i]["Slowest"]+"     \
+                                <span class='small'>sec</span>  \
                             </td>                               \
                         </tr>                                   \
                     </table>                                    \

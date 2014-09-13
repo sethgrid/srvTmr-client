@@ -29,6 +29,42 @@ body {
    width: 100%;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {}
+
+#stats_table{
+  font-size: 18pt;
+}
+
+.stats_row{
+  background-color: red;
+}
+
+.even{
+  background-color: white;
+}
+
+.odd{
+  background-color: #CCEEEE;
+}
+
+.right_cell{
+
+}
+
+.left_cell{
+
+}
+
+.small{
+  font-size: small;
+  font-weight: lighter;
+}
+
 span.stopwatch {
 	color: 'blue';
 }
