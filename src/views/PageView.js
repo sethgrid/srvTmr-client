@@ -93,7 +93,7 @@ define(function(require, exports, module) {
 
         this.timerSurface = new Surface({
             size: [200, 200],
-            content : "<span class='stopwatch'><span class='mins'>00</span>:<span class='secs'>00</span>.<span class='tenths'>0</span></span><input id='timer-value' type='hidden' value='00:00.0' name='time'>",
+            content : "<span class='stopwatch'><span class='mins'>00</span>:<span class='secs'>00</span>.<span class='tenths'>0</span></span><input id='timer-value' type='hidden' value='00:00.0' name='time'><br><span class='arrow'>▶<span>",
             properties: {
                 borderRadius: '100px',
                 textAlign: 'center',
@@ -128,12 +128,12 @@ define(function(require, exports, module) {
 
         this.submitSurface = new Surface({
             size: [66, 66],
-            content: '▶',
+            content: '✓',
             properties: {
                 borderRadius: '33px',
                 textAlign: 'center',
                 paddingTop: '4px',
-                paddingLeft: '10px',
+                paddingLeft: '0px',
                 backgroundColor: '#567714', // green
                 fontSize: '48px',
                 color: '#D4EE9F',
@@ -147,13 +147,14 @@ define(function(require, exports, module) {
 
         this.submittedSurface = new Surface({
             size: [100, 100],
-            content: '✓',
+            content: 'OK!',
             properties: {
                 backgroundColor: '#669999',
                 color: 'white',
-                fontSize: '76px',
+                fontSize: '64px',
                 borderRadius: '50px',
-                paddingLeft: '20px',
+                paddingLeft: '2px',
+                paddingTop: '10px',
             },
         });
 
@@ -176,9 +177,57 @@ define(function(require, exports, module) {
     function _createStats() {
         this.statsSurface = new Surface({
             size: [undefined, undefined],
-            content: '',
+            content: "                                        \
+                    <table id='stats_table'>                    \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                Average                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0    \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Median                          \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0      \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                90th Percentile                 \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0    \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Fastest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                Slowest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                    </table>                                    \
+                                                                \
+                ",
             properties: {
-                //borderRadius: '5px',
                 textAlignt: 'center',
                 paddingTop: '5px',
                 backgroundColor: '#E6E6F0',
@@ -283,7 +332,56 @@ define(function(require, exports, module) {
                 ";
             }
         }
-        return "Loading ..."
+        return  "                                        \
+                    <table id='stats_table'>                    \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                Average                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0    \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Median                          \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0      \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                90th Percentile                 \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0    \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='odd'>                        \
+                            <td class='left_cell'>              \
+                                Fastest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                        <tr class='even'>                       \
+                            <td class='left_cell'>              \
+                                Slowest                         \
+                            </td>                               \
+                            <td class='right_cell'>             \
+                                0     \
+                                <span class='small'>sec</span>  \
+                            </td>                               \
+                        </tr>                                   \
+                    </table>                                    \
+                                                                \
+                ";
     }
 
     function formatStats(jsonData){

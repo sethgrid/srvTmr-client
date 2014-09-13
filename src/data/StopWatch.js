@@ -50,6 +50,7 @@ define(function(require, exports, module) {
             if (interval) {
               clearInterval(interval);
               interval = null;
+              render();
             }
           }
 
@@ -90,7 +91,12 @@ define(function(require, exports, module) {
             m = minutes.substr(-2);
             s = seconds.substr(-2);
             tn = tenths.substr(-2);
-            return "<span class='stopwatch'><span class='mins'>"+m+"</span>:<span class='secs'>"+s+"</span>.<span class='tenths'>"+tn+"</span></span><input id='timer-value' type='hidden' value='"+t+"' name='time'>";
+
+            state = "<span class='arrow'>▶<span>"
+            if (interval){
+              state = "<span class='arrow'>▐▐&nbsp;&nbsp;&nbsp;<span>"
+            }
+            return "<span class='stopwatch'><span class='mins'>"+m+"</span>:<span class='secs'>"+s+"</span>.<span class='tenths'>"+tn+"</span></span><input id='timer-value' type='hidden' value='"+t+"' name='time'><br>"+state;
           }
 
           // public API
