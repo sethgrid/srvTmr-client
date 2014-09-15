@@ -34,6 +34,7 @@ define(function(require, exports, module) {
     PageView.DEFAULT_OPTIONS = {
         geoData: {},
         stopwatch: {},
+        backendUrl: "http://srvtmr.herokuapp.com",
         headerSize: 44,
         timerRunning: false,
         lastSubmission: 0,
@@ -255,7 +256,7 @@ define(function(require, exports, module) {
                 // why don't I have 'this'?
                 // next: when query is available, call to it and get data back
                 this.options.statsUrlQuery = window.stats_url_query
-                Utility.loadURL("http://localhost:9999/stats?"+this.options.statsUrlQuery, function(response){
+                Utility.loadURL(this.options.backendUrl+"/stats?"+this.options.statsUrlQuery, function(response){
                     this.options.placeStats = JSON.parse(response);
                 }.bind(this));
             }
@@ -433,7 +434,7 @@ define(function(require, exports, module) {
                 var place_id = e.options[e.selectedIndex].value;
                 var time = document.getElementById('timer-value');
 
-                Utility.loadURL("http://localhost:9999/submit?place_id="+place_id+"&time="+time.value, function(response){
+                Utility.loadURL(this.options.backendUrl+"/submit?place_id="+place_id+"&time="+time.value, function(response){
                     this.submittedModifier.setTransform(
                         Transform.scale(1, 1, 1),
                         { duration : 2000, curve: Easing.outBack }
